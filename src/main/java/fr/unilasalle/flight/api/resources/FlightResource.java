@@ -34,8 +34,14 @@ public class FlightResource extends GenericResource {
 
     @GET
     @Path("/{id}")
+    @Transactional
 public Response getFlightById(@PathParam("id") Long id) {
-        return getOr404(flightRepo.findByIdOptional(id).orElse(null));
+        Flight flight = flightRepo.findByIdOptional(id).orElse(null);
+        if (flight != null) {
+            // Initialize bookings collection if it's lazy loaded
+            flight.getBookings().size(); // This will load the bookings due to transaction being open
+        }
+        return getOr404(flight);
     }
 
     @POST
