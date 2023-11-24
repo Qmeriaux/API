@@ -9,7 +9,7 @@ import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 
 @Model
 public class FlightRepo implements PanacheRepositoryBase<Flight, Long> {
-    public Flight findByNumber(String number) {
-        return find("number", number).firstResult();
+    public List<Flight> findByDestination(String destination) {
+        return list("destination", destination);
     }
 }

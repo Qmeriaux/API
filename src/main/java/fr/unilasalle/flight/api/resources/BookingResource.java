@@ -4,6 +4,7 @@ import fr.unilasalle.flight.api.repositories.BookingRepo;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -23,10 +24,10 @@ public class BookingResource extends GenericResource {
 
     @GET
     public Response getBookings(
-            @QueryParam("passengerId") Integer passengerId
+            @QueryParam("flightId") Integer flightId
     ) {
-        if (passengerId != null) {
-            return getOr404(bookingRepo.findByPassengerId(passengerId));
+        if (flightId != null) {
+            return getOr404(bookingRepo.findByFlightId(flightId));
         }
         return getOr404(bookingRepo.listAll());
     }
@@ -43,6 +44,18 @@ public class BookingResource extends GenericResource {
         try {
             bookingRepo.persistAndFlush(booking);
             return Response.ok(booking).status(201).build();
+        } catch (Exception e) {
+            return Response.status(400).entity(new ErrorWrapper(e.getMessage())).build();
+        }
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Transactional
+    public Response deleteBooking(@PathParam("id") Long id) {
+        try {
+            bookingRepo.deleteById(id);
+            return Response.ok().status(204).build();
         } catch (Exception e) {
             return Response.status(400).entity(new ErrorWrapper(e.getMessage())).build();
         }
