@@ -38,13 +38,11 @@ public class Passenger extends PanacheEntityBase {
     private String firstname;
     @Column(unique = false, nullable = false)
     private String lastname;
-    @Column(unique = true, nullable = false)
+    @Column(unique = false, nullable = false)
     private String email;
 
+    @JsonIgnoreProperties("passenger")
+    @OneToMany(mappedBy = "passenger", cascade = CascadeType.MERGE, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Booking> bookings;
 
-
-
-    /* @JsonIgnoreProperties("passenger")
-    @OneToMany(mappedBy = "passenger", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Booking> bookings; */
 }

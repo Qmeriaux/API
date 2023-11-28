@@ -39,15 +39,14 @@ public class Booking extends PanacheEntityBase {
             allocationSize = 1, initialValue = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bookings_sequence_in_java_code")
     private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("bookings")
     @JoinColumn(name = "flightId")
     private Flight flight; // This should match the column name in the flight table
 
-    /* @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("bookings")
     @JoinColumn(name = "passengerId")
-    private Passenger passenger; // This should match the column name in the flight table */
-    private Integer passengerId;
-
+    private Passenger passenger;
 }
