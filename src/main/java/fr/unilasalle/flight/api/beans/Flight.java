@@ -1,6 +1,7 @@
 package fr.unilasalle.flight.api.beans;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
@@ -26,9 +27,9 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonIdentityInfo(
+/* @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id")
+        property = "id") */
 public class Flight extends PanacheEntityBase {
     @Id
     @SequenceGenerator(
@@ -53,6 +54,7 @@ public class Flight extends PanacheEntityBase {
     private String arrival_time;
     @Column(unique = false, nullable = false)
     private Integer plane_id;
+    @JsonIgnoreProperties("flight")
     @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Booking> bookings;
 }
