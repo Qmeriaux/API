@@ -33,7 +33,20 @@ public class PassengerResource extends GenericResource {
     @PUT
     @Transactional
     public Response updatePassenger(Passenger passenger) {
-        passengerRepo.persist(passenger);
-        return Response.ok(passenger).build();
+        // check which fields are filled and retrieve fields not filled from db
+        Passenger passengerFromDb = passengerRepo.findById(passenger.getId());
+        if (passenger.getFirstname() == null) {
+            passenger.setFirstname(passengerFromDb.getFirstname());
+        }
+        if (passenger.getLastname() == null) {
+            passenger.setLastname(passengerFromDb.getLastname());
+        }
+        if (passenger.getEmail() == null) {
+            passenger.setEmail(passengerFromDb.getEmail());
+        }
+
+        passengerRepo.update("firstname = ?1, lastname = ?2, email = ?3",
+                passenger.getFirstname(), passenger.getLastname(), passenger.getEmail());
+        return Response.ok(passenger).status(200).build();
     }
 }
